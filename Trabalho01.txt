@@ -1,0 +1,94 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		ArrayList<String> nome = new ArrayList<String>();
+		ArrayList<String> sexo = new ArrayList<String>();
+		ArrayList<String> endereco = new ArrayList<String>();
+		ArrayList<String> cidade = new ArrayList<String>();
+		ArrayList<String> email = new ArrayList<String>();
+		ArrayList<String> telefone = new ArrayList<String>();
+		ArrayList<String> idade = new ArrayList<String>();
+
+		try {
+
+			BufferedReader br = new BufferedReader(
+					new FileReader("C:\\Users\\Alex\\Desktop\\Trabalho01\\arquivo\\arquivoDados.csv"));
+			Scanner scanner = new Scanner(br);
+			System.out.println(scanner.hasNextLine());
+
+			while (scanner.hasNextLine()) {
+
+				String linha = scanner.nextLine();
+
+				String[] partes = linha.split(",");
+
+				nome.add(semAcento(partes[0]));
+				sexo.add(semAcento(partes[1]));
+				endereco.add(semAcento(partes[2]));
+				cidade.add(semAcento(partes[3]));
+				email.add(semAcento(partes[4]));
+				telefone.add(semAcento(partes[5]));
+				idade.add(semAcento(partes[6]));
+
+			}
+			// System.out.println(nome);
+			scanner.close();
+			while (true) {
+				Scanner sc = new Scanner(System.in);
+				String find = sc.nextLine();
+
+				int findNome = nome.indexOf(semAcento(find));
+
+				if (semAcento(find).equals("exit")) {
+
+					System.out.println("Obrigado, volte sempre");
+					// escreveu exit?
+					break;
+
+					
+					// pesquisa o nome
+				} else if (findNome == -1) {
+					System.out.print("Nao Cadastrado");
+				} else if (findNome >= 0) {
+
+					String element = nome.get(findNome);
+					String element1 = sexo.get(findNome);
+					String element2 = endereco.get(findNome);
+					String element3 = cidade.get(findNome);
+					String element4 = email.get(findNome);
+					String element5 = telefone.get(findNome);
+					String element6 = idade.get(findNome);
+
+					System.out.println(element);
+					System.out.println(element1);
+					System.out.println(element2);
+					System.out.println(element3);
+					System.out.println(element4);
+					System.out.println(element5);
+					System.out.println(element6);
+					
+					System.out.println("Cadastrado");
+				}
+
+			}
+		} catch (IOException ex) {
+			System.out.println(ex.getMessage());
+		}
+	}
+
+	public static String semAcento(String str) {
+		String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+		Pattern pattern = Pattern.compile("[^\\p{ASCII}]");
+		return pattern.matcher(nfdNormalizedString).replaceAll("");
+	}
+
+}
